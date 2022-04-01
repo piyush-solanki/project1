@@ -1,0 +1,13 @@
+---
+- hosts: localhost
+  connection: local
+  become: true
+  tasks:
+    - name: deploy nginx docker container
+      docker_container:
+        image: piyushsolanki/nginxp:latest
+        name: nginx
+        state: started
+        auto_remove: true
+        ports:
+          - "80:80"
