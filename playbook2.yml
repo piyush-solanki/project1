@@ -1,0 +1,24 @@
+---
+- hosts: localhost
+  connection: local
+  remote_user: ansible
+  become: true
+  
+  tasks:
+  - name: stop runing docker container
+    command: docker stop nginx
+    ignore_errors: yes
+
+  - name: remove container
+    command:  docker rm nginx
+    ignore_errors: yes
+
+  - name: remove image
+    command: docker rmi nginx
+    ignore_errors: yes
+
+  - name: Build Image
+    command: docker build -t  piyushsolanki/nginxp:latest .
+
+  - name: create container using
+    command: docker run -d --name nginx -p 80:80 piyushsolanki/nginxp:latest

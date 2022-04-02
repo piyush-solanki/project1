@@ -1,0 +1,11 @@
+---
+- hosts: localhost
+  connection: local
+  remote_user: ansible
+  become: true
+  
+  tasks:
+  - name: deploy nginx docker container
+    command: ls
+  - name: create container using simple-devops-image
+    command: ls -lrth
