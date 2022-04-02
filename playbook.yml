@@ -10,7 +10,3 @@
 
   - name: create container using simple-devops-image
     command: docker run -d --name nginx -p 80:80 piyushsolanki/nginxp:latest
-   
-  - name: deploysss nginx docker container
-
-

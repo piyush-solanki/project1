@@ -1,0 +1,39 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: 'githubwithpass', url: 'https://github.com/piyush-solanki/project1.git']]])
+            }
+        }
+        stage('Build') {
+            steps {
+                sh 'docker build . -t piyushsolanki/nginxp:latest'
+            }
+        }
+        stage('Push Docker HUB') {
+            steps {
+                withCredentials([string(credentialsId: 'Dockerhub', variable: 'dockercred')]) {
+                   sh 'docker login -u piyushsolanki -p ${dockercred}'
+                   
+                   sh 'docker push piyushsolanki/nginxp:latest'
+                }
+                
+            }
+        }
+        stage('Deploy to Server') {
+            steps {
+                    //sh 'docker stop nginx'
+                    //sh 'docker rm nginx'
+                    //sh 'docker run -d -p 80:80 --name nginx piyushsolanki/nginxp:latest '
+                  ansiblePlaybook become: true, credentialsId: 'ansibleuser', disableHostKeyChecking: true, extras: '--ask-become-pass', installation: 'ansible', playbook: '/home/ubuntu/project2/project1/playbook.yml'
+                    
+                }
+                
+            }
+        }
+        
+    }
+
+
